@@ -25,11 +25,13 @@ import zio._
  * fiber is running.
  */
 private[zio] sealed trait FiberMessage
+
 private[zio] object FiberMessage {
   final case class InterruptSignal(cause: Cause[Nothing])        extends FiberMessage
   final case class Stateful(onFiber: FiberRuntime[_, _] => Unit) extends FiberMessage
   final case class Resume(effect: ZIO[_, _, _])                  extends FiberMessage
   case object YieldNow                                           extends FiberMessage
-
   val resumeUnit: FiberMessage = Resume(ZIO.unit)
+  case object Unit                                               extends FiberMessage
+  val unit: FiberMessage = Unit
 }
